@@ -1,0 +1,122 @@
+import UIKit
+
+class ViewController: UIViewController {
+    
+    // MARK: - LIAISON DES UI ÉLÉMENTS
+    @IBOutlet weak var TimerLabel: UILabel!
+    @IBOutlet weak var MilisecondsBtns: UILabel!
+    @IBOutlet weak var StartStopButton: UIButton!
+    @IBOutlet weak var ResetButton: UIButton!
+    
+    @IBOutlet weak var stopbtn: UIButton!
+    @IBOutlet weak var ResetButton2: UIButton!
+    
+    // MARK: - DÉCLARATION DES VARIABLES
+    var timer: Timer = Timer()
+    var millisecondsTimer: Timer = Timer()
+    var milliseconds: Int = 0
+    var count: Int = 0
+    var timerCounting: Bool = false
+    
+    // MARK: - CYCLE DE VIE
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        StartStopButton.setTitle("Start", for: .normal)
+        StartStopButton.setTitleColor(.black, for: .normal)
+    }
+    
+    // MARK: - GESTION DU TIMER PRINCIPAL
+    @objc func timerCounter() {
+        count += 1
+        TimerLabel.text = formattedTime(seconds: count)
+    }
+    
+    // MARK: - GESTION DES MILLISECONDES
+    @objc func millisecondCounter() {
+        milliseconds += 10
+        if milliseconds >= 1000 {
+            milliseconds = 0
+        }
+        MilisecondsBtns.text = formattedMilliseconds(milliseconds: milliseconds)
+    }
+    
+    // MARK: - ACTIONS DES BOUTONS
+    @IBAction func StartStopButton(_ sender: Any) {
+        print(timerCounting)
+            startTimer()
+
+
+            StartStopButton.setTitle("Resume", for: .normal)
+
+            StartStopButton.setTitleColor(.green, for: .normal)
+        
+    }
+    
+    
+    @IBAction func stopbtn(_ sender: Any) {
+        print(timerCounting)
+        if timerCounting {
+            stopTimer()
+            StartStopButton.setTitle("Red", for: .normal)
+            StartStopButton.setTitleColor(.red, for: .normal)
+        }
+    }
+    
+    
+    @IBAction func RestButton(_ sender: Any) {
+        resetAll()
+    }
+    
+    
+    
+   
+    
+    // MARK: - FONCTIONS UTILITAIRES
+    private func formattedTime(seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let sec = seconds % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, sec)
+    }
+    
+    private func formattedMilliseconds(milliseconds: Int) -> String {
+        let millis = milliseconds / 10 // Convertir en centièmes (2 chiffres après le ".")
+        return String(format: ".%02d", millis)
+    }
+    
+    private func startTimer() {
+        timerCounting = true
+        timer = Timer.scheduledTimer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(timerCounter),
+            userInfo: nil,
+            repeats: true)
+        
+        millisecondsTimer = Timer.scheduledTimer(
+            timeInterval: 0.01,
+            target: self,
+            selector: #selector(millisecondCounter),
+            userInfo: nil,
+            repeats: true)
+    }
+    
+    private func stopTimer() {
+        timerCounting = false
+        timer.invalidate()
+        millisecondsTimer.invalidate()
+    }
+    
+    private func resetAll() {
+        stopTimer()
+        count = 0
+        milliseconds = 0
+        TimerLabel.text = "00:00:00"
+        MilisecondsBtns.text = ".00"
+        StartStopButton.setTitle("Start", for: .normal)
+        StartStopButton.setTitleColor(.green, for: .normal)
+    }
+    
+    
+ 
+}
