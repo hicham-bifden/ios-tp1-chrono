@@ -18,12 +18,7 @@ class ViewController: UIViewController {
     var count: Int = 0
     var timerCounting: Bool = false
     
-    // MARK: - CYCLE DE VIE
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        StartStopButton.setTitle("Start", for: .normal)
-        StartStopButton.setTitleColor(.black, for: .normal)
-    }
+
     
     // MARK: - GESTION DU TIMER PRINCIPAL
     @objc func timerCounter() {
@@ -42,22 +37,22 @@ class ViewController: UIViewController {
     
     // MARK: - ACTIONS DES BOUTONS
     @IBAction func StartStopButton(_ sender: Any) {
-        print(timerCounting)
+        if timerCounting == false {
             startTimer()
-
-
-            StartStopButton.setTitle("Resume", for: .normal)
-
             StartStopButton.setTitleColor(.green, for: .normal)
+        }else {
+            
+            
+            print("Alredy running")
+        }
         
     }
     
     
     @IBAction func stopbtn(_ sender: Any) {
-        print(timerCounting)
+        print("chrono est en pause ")
         if timerCounting {
             stopTimer()
-            StartStopButton.setTitle("Red", for: .normal)
             StartStopButton.setTitleColor(.red, for: .normal)
         }
     }
